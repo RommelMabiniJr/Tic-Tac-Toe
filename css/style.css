@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+
+:root {
+    --l-space: 80px;
+    --s-space: 25px;
+    --vs-space: 15px;
+    --symbols: 7.5rem;
+}
+
+body {
+    font-family: 'Quicksand','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.row, .gameboard-container {
+    display: grid;
+    gap: var(--vs-space);
+}
+
+.gameboard-container {
+    margin: var(--l-space) auto;
+    background-color: #8855;
+    width: 500px;
+    height: 500px;
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.row {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.col {
+    background-color: #ffffff;
+    font-size: var(--symbols);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 300;
+}
