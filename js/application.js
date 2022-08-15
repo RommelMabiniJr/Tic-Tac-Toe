@@ -1,7 +1,8 @@
-const Gameboard = (function (doc) {
-    const BOARD_SIDES = 3;
+const Gameboard = (function () {
     let _gameboard = []
     let _count = 0
+    let _players = {}
+    let _currentPlayer
 
     const create = () => {
         for (let row = 0; row < 3; row++) {
@@ -15,57 +16,121 @@ const Gameboard = (function (doc) {
         }
     }
 
-    const takeCell = (player, [row,column]) => {
+    const cellIsEmpty = (row,column) => {
         if (_gameboard[row][column] == null) {
-            _gameboard[row][column] = player.getRole()
+            return true;
         } else {
-            console.log("Error: slot is taken!!")
+            return false;
         }
     }
 
+    const getGameBoard = () => {
+        const board = _gameboard
+        return board;
+    }
 
-    const displayContents = function () {
-        const cells = doc.querySelectorAll(".col")
+    const setGameBoard = (playerValue, [row, column]) => {
+        _gameboard[row][column] = playerValue;
+    }
+
+
+    const generatePlayers = () => {
+        _players = {
+            p1 : Player("Player 1", "X"),
+            p2 : Player("Player 2", "O")
+        }
+
+        _currentPlayer = _players.p1
+    }
+
+    const switchPlayer = () => {
+        if (_currentPlayer == _players.p1) {
+            _currentPlayer = _players.p2 
+        } else {
+            _currentPlayer = _players.p1;
+        }
+    }
+
+    const getCurrentPlayer = () => {
+        return _currentPlayer
+    }
+
+    const linkCellEvent = (row, column) => {
+        _currentPlayer.takeCell(row, column)
+    }
+
+
+    const showCurrentBoardState = () => console.log(_gameboard)
+
+    return {create, cellIsEmpty, showCurrentBoardState, getGameBoard, setGameBoard, linkCellEvent, generatePlayers, switchPlayer}
+
+})();
+
+
+const DisplayController = (function (doc) {
+    const _BOARD_SIDES = 3;
+    const _cells = doc.querySelectorAll(".col")
+
+    const displayBoardContents = function (gameObj) {
+        const _gameboard = gameObj.getGameBoard()
         let index = 0;
 
-        for (let row = 0; row < BOARD_SIDES; row++) {
-            for (let column = 0; column < BOARD_SIDES; column++) {
+        for (let row = 0; row < _BOARD_SIDES; row++) {
+            for (let column = 0; column < _BOARD_SIDES; column++) {
                 if (_gameboard[row][column] !== null) {
-                    cells[index].innerText = _gameboard[row][column];
+                    _cells[index].innerText = _gameboard[row][column];
                 }
-                console.log(cells[index])
+                //console.log(_cells[index])
                 index++
             }
         }
     }
 
-    const showCurrentBoardState = () => console.log(_gameboard)
 
-    return {create,takeCell,showCurrentBoardState,displayContents}
+    const createListeners = () => {
+        _cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                const row = cell.getAttribute("data-row-val")
+                const column = cell.getAttribute("data-col-val")
 
+                Gameboard.linkCellEvent(row, column);
+                displayBoardContents(Gameboard)
+            })
+        });
+    }
+
+    return {displayBoardContents,createListeners}
 })(document);
 
+
+export const Game = ( function () {
+
+    const initialize = () => {
+        Gameboard.create();
+        Gameboard.generatePlayers();
+        DisplayController.createListeners();
+    }
+
+    const start = () => {
+        initialize();
+    }
+
+
+    return {start}
+})();
 
 const Player = (name, role) => {
     const getName = () => name
     const getRole = () => role
 
-    const move = () => {
-
+    const takeCell = (row, column) => {
+        if (Gameboard.cellIsEmpty(row, column)) {
+            Gameboard.setGameBoard(getRole(), [row, column])
+            Gameboard.switchPlayer()
+        } else {
+            console.log("Error: Cell is Taken")
+        }
     }
 
-    return {getName, getRole}
+    return {getName, getRole, takeCell}
 }
-
-Gameboard.create()
-let player1 = Player("Rommel", "X")
-let AI = Player("AI Bot", "O")
-
-Gameboard.takeCell(player1,[0,1])
-Gameboard.takeCell(AI,[0,2])
-Gameboard.takeCell(AI,[1,2])
-Gameboard.takeCell(AI,[2,2])
-Gameboard.showCurrentBoardState()
-Gameboard.displayContents()
-//
-//console.log(player1.getName())
