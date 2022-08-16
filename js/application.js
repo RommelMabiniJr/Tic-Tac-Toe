@@ -1,8 +1,8 @@
 const Gameboard = (function () {
-    let _gameboard = []
-    let _count = 0
-    let _players = {}
-    let _currentPlayer
+    let _gameboard = [];
+    let _moveCount = 0;
+    let _players = {};
+    let _currentPlayer;
 
     const create = () => {
         for (let row = 0; row < 3; row++) {
@@ -10,10 +10,44 @@ const Gameboard = (function () {
         }
     }
 
-    const _counter = () => {
-        return () => {
-            ++_count
+    const _moveCounter = () => { 
+        ++_moveCount
+    }
+
+    const straightChecker = (playerRole, [row, column]) => {
+        const symbol = playerRole
+        
+        let colTest = [], diagonalTest = [], diagonalTestReverse = []
+
+        for (let i = 0; i < 3; i++) {
+            const element = _gameboard[i][column];
+            colTest.push(element)
         }
+
+        let r = 2;
+        for (let c = 0; c < 3; c++) {
+
+            const elem1 = _gameboard[c][c]
+            const elem2 = _gameboard[r][c]
+            diagonalTest.push(elem1)
+            diagonalTestReverse.push(elem2)
+
+            r--         
+        }
+
+        let colResult = colTest.every(slot => slot == symbol)
+        let dResult = diagonalTest.every(slot => slot == symbol)
+        let dReverseResult = diagonalTestReverse.every(slot => slot == symbol)
+        let rowResult = _gameboard[row].every(slot => slot == symbol)
+
+        if (colResult || rowResult || dResult || dReverseResult) {
+            alert("We have a winner!!")
+        } else if (_moveCount == 9) {
+            alert("It's a tie!!")
+        }
+
+        console.log(`${dResult}${dReverseResult}${symbol}`)
+        console.log(diagonalTestReverse)
     }
 
     const cellIsEmpty = (row,column) => {
@@ -31,6 +65,11 @@ const Gameboard = (function () {
 
     const setGameBoard = (playerValue, [row, column]) => {
         _gameboard[row][column] = playerValue;
+        _moveCounter()
+
+        if (_moveCount >= 5) {
+            straightChecker(playerValue, [row, column])
+        }
     }
 
 
@@ -57,12 +96,13 @@ const Gameboard = (function () {
 
     const linkCellEvent = (row, column) => {
         _currentPlayer.takeCell(row, column)
+        console.log(_moveCount)
     }
 
 
     const showCurrentBoardState = () => console.log(_gameboard)
 
-    return {create, cellIsEmpty, showCurrentBoardState, getGameBoard, setGameBoard, linkCellEvent, generatePlayers, switchPlayer}
+    return {create, cellIsEmpty, getGameBoard, setGameBoard, linkCellEvent, generatePlayers, switchPlayer}
 
 })();
 
