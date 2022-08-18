@@ -10,22 +10,51 @@
     <script type="module" src="./js/script.js" defer></script>
 </head>
 <body>
-    <div class="outer-gameboard">
-        <div class="gameboard-container">
-            <div class="row row-1">
-                <div class="col" data-col-val="0" data-row-val="0"></div>
-                <div class="col" data-col-val="1" data-row-val="0"></div>
-                <div class="col" data-col-val="2" data-row-val="0"></div>
+    <div class="main-container">
+        <div class="header">
+            <P>Let us Play</P>
+            <H1>Tic-Tac-Toe</H1>
+        </div>
+        <div class="outer-gameboard hide">
+            <div class="set-up-container">
+                <img class="proceed-btn arrowLeft" src="./icons/previous.svg" alt="">
+                <div class="gameboard-container">
+                    <div class="row row-1">
+                        <div class="col" data-col-val="0" data-row-val="0"></div>
+                        <div class="col" data-col-val="1" data-row-val="0"></div>
+                        <div class="col" data-col-val="2" data-row-val="0"></div>
+                    </div>
+                    <div class="row row-2">
+                        <div class="col" data-col-val="0" data-row-val="1"></div>
+                        <div class="col" data-col-val="1" data-row-val="1"></div>
+                        <div class="col" data-col-val="2" data-row-val="1"></div>
+                    </div>
+                    <div class="row row-3">
+                        <div class="col" data-col-val="0" data-row-val="2"></div>
+                        <div class="col" data-col-val="1" data-row-val="2"></div>
+                        <div class="col" data-col-val="2" data-row-val="2"></div>
+                    </div>
             </div>
-            <div class="row row-2">
-                <div class="col" data-col-val="0" data-row-val="1"></div>
-                <div class="col" data-col-val="1" data-row-val="1"></div>
-                <div class="col" data-col-val="2" data-row-val="1"></div>
             </div>
-            <div class="row row-3">
-                <div class="col" data-col-val="0" data-row-val="2"></div>
-                <div class="col" data-col-val="1" data-row-val="2"></div>
-                <div class="col" data-col-val="2" data-row-val="2"></div>
+        </div>
+        <div class="pre-game">
+            <div class="set-up-container">
+                <form class="box">
+                    <img class="proceed-btn arrowRight" src="./icons/next.svg" alt="">
+                    <div class="player-input">
+                        <div class="p1-container player-containers">
+                            <label class="player-tag" for="player-1">Player 1</label>
+                            <p class="player-role p1-role">X</p>
+                            <input type="text" name="" id="player-1" placeholder="Enter Name">
+                        </div>
+                        <div class="p2-container player-containers">
+                            <label class="player-tag" for="player-2">Player 2</label>
+                            <p class="player-role p2-role">O</p>
+                            <input type="text" name="" id="player-2" placeholder="Enter Name">
+                        </div>
+                    </div>
+                </form>
+                <button class="switch-btn">Switch Roles</button>
             </div>
         </div>
     </div>
