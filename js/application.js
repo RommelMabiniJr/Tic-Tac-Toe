@@ -41,9 +41,14 @@ const Gameboard = (function () {
         let rowResult = _gameboard[row].every(slot => slot == symbol)
 
         if (colResult || rowResult || dResult || dReverseResult) {
-            alert(`Player ${playerVal.getName()} wins!!`)
+            //alert(`Player ${playerVal.getName()} wins!!`)
+            const msg = `${playerVal.getName()} wins!`
+            const winningRole = playerVal.getRole()
+            DisplayController.setWinner(msg, winningRole)
         } else if (_moveCount == 9) {
-            alert("It's a tie!!")
+            const msg = "It's a tie!!"
+            const winningRole = "X:O"
+            DisplayController.setWinner(msg, winningRole)
         }
 
         //console.log(`${dResult}${dReverseResult}${symbol}`)
@@ -116,6 +121,9 @@ const DisplayController = (function (doc) {
     const _preGameContainer = doc.querySelector(".pre-game")
     const _p1Role = doc.querySelector(".p1-role")
     const _p2Role = doc.querySelector(".p2-role")
+    const _winnerName = doc.querySelector(".w-name")
+    const _winnerRole = doc.querySelector(".winner-role")
+    const _gameResultCont = doc.querySelector(".game-result")
 
     const displayBoardContents = (gameObj) => {
         const _gameboard = gameObj.getGameBoard()
@@ -189,7 +197,20 @@ const DisplayController = (function (doc) {
         }
     }
 
-    return {displayBoardContents, createListeners, getPlayersInfo}
+    const setWinner = (winOrTie, role) => {
+        _winnerName.innerText = winOrTie;
+        _winnerRole.innerText = role;
+        displayGameResult()
+    }
+
+    const displayGameResult = () => {
+        _outerGameBoard.classList.toggle("hide")
+        _gameResultCont.classList.toggle("hide")
+        _gameResultCont.classList.toggle("show")
+        _gameResultCont.classList.toggle("blurr")
+    }
+
+    return {displayBoardContents, createListeners, getPlayersInfo, setWinner}
 })(document);
 
 

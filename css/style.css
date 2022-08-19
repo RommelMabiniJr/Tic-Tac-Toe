@@ -6,7 +6,7 @@ p {
     margin: 0;
 }
 
-p +P {
+p + P {
     margin: 10px;
 }
 
@@ -83,15 +83,6 @@ body {
     font-weight: 400;
 }
 
-.hide {
-    display: none;
-}
-
-.set-up-container {
-    height: calc(var(--default-width) - 70px);
-    width: calc(var(--default-width) + 120px)
-}
-
 
 /*PREGAME SETUP DESIGN*/
 
@@ -100,6 +91,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: calc(var(--default-width) - 70px);
+    width: calc(var(--default-width) + 120px)
 }
 
 .set-up-container > .box {
@@ -168,4 +161,61 @@ input[placeholder="Enter Name"] {
 input[placeholder="Enter Name"]:focus {
     outline: none;
     border: 2px solid #273E47;
+}
+
+
+/*GAME RESULT PANEL*/
+
+.winner-role {
+    font-size: var(--symbols-in-cell);
+    font-weight: 700;
+}
+
+.game-result {
+    margin: 0 auto;
+}
+
+.nav-btn {
+    height: var(--symbols-in-cell);
+    width: var(--symbols-in-cell);
+    margin: var(--xs-space);
+    cursor: pointer;
+}
+
+.nav-btns {
+    margin-top: var(--m-space);
+}
+
+.crown-icon {
+    height: var(--symbols);
+    width: var(--symbols);
+    position: relative;
+    top: 24px;
+}
+
+
+
+
+
+
+
+
+
+.hide {
+    display: none;
+}
+
+
+/*Simple Animation for game result*/
+.show {
+    animation: fadeIn 3s;
+}
+
+.blurr {
+    opacity: 0%;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+  100% { opacity: 1; }
 }
