@@ -23,6 +23,7 @@ p + P {
     --default-width: 500px;
     --board-width: calc(var(--default-width) - 150px);
     --board-gap: 12px;
+    --l-fsize: 3rem;
     --m-fsize: 1.5rem;
     --s-fsize: 1.2rem;
     --btn-height: 50px;
@@ -173,6 +174,7 @@ input[placeholder="Enter Name"]:focus {
 
 .game-result {
     margin: 0 auto;
+    position: relative;
 }
 
 .nav-btn {
@@ -191,6 +193,54 @@ input[placeholder="Enter Name"]:focus {
     width: var(--symbols);
     position: relative;
     top: 24px;
+}
+
+.game-score {
+    position: absolute;
+    top: 24px;
+    right: -250px;
+    background-color: #dadada;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.game-score > h2 {
+    margin-top: calc(var(--m-space) - 25px);
+}
+
+.score-header > h2 {
+    margin: var(--s-space) var(--m-space);
+}
+
+.current-round {
+    font-size: var(--l-fsize);
+    font-weight: 700;
+}
+
+.individual-score > * {
+    margin: var(--xxs-space);
+}
+
+.individual-score {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.individual-score > h5 {
+    justify-self: flex-end;
+}
+
+
+.individual-score > p {
+    justify-self: center;
+}
+
+.score-content {
+    display: grid;
+    grid-template-rows  : repeat(2, 1fr);
+    width: 200px;
+    margin: var(--s-space) auto;
 }
 
 

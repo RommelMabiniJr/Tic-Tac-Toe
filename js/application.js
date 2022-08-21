@@ -10,6 +10,10 @@ const Gameboard = (function () {
         }
     }
 
+    const resetMoveCounts = () => {
+        _moveCount = 0;
+    }
+
     const _moveCounter = () => { 
         ++_moveCount
     }
@@ -44,6 +48,7 @@ const Gameboard = (function () {
             //alert(`Player ${playerVal.getName()} wins!!`)
             const msg = `${playerVal.getName()} wins!`
             const winningRole = playerVal.getRole()
+            playerVal.incrementScore()
             DisplayController.setWinner(msg, winningRole)
         } else if (_moveCount == 9) {
             const msg = "It's a tie!!"
@@ -51,8 +56,11 @@ const Gameboard = (function () {
             DisplayController.setWinner(msg, winningRole)
         }
 
-        //console.log(`${dResult}${dReverseResult}${symbol}`)
-        //console.log(diagonalTestReverse)
+
+        DisplayController.displayScore(_players.p1, _players.p2);
+
+        console.log(`${dResult}${dReverseResult}${symbol}`)
+        console.log(diagonalTestReverse)
     }
 
     const cellIsEmpty = (row,column) => {
@@ -95,6 +103,10 @@ const Gameboard = (function () {
         }
     }
 
+    const restart = () => {
+
+    }
+
     const getCurrentPlayer = () => {
         return _currentPlayer
     }
@@ -107,7 +119,7 @@ const Gameboard = (function () {
 
     const showCurrentBoardState = () => console.log(_gameboard)
 
-    return {create, cellIsEmpty, getGameBoard, setGameBoard, linkCellEvent, setPlayers, switchPlayer}
+    return {create, cellIsEmpty, getGameBoard, setGameBoard, linkCellEvent, setPlayers, switchPlayer, resetMoveCounts}
 
 })();
 
@@ -124,6 +136,9 @@ const DisplayController = (function (doc) {
     const _winnerName = doc.querySelector(".w-name")
     const _winnerRole = doc.querySelector(".winner-role")
     const _gameResultCont = doc.querySelector(".game-result")
+    const _restartBtn = doc.querySelector(".restart")
+    const _p1Score = doc.querySelector(".p1-score-actual")
+    const _p2Score = doc.querySelector(".p2-score-actual")
 
     const displayBoardContents = (gameObj) => {
         const _gameboard = gameObj.getGameBoard()
@@ -140,20 +155,40 @@ const DisplayController = (function (doc) {
         }
     }
 
+    const clearBoardContents = () => {
+        let index = 0;
+
+        for (let row = 0; row < _BOARD_SIDES; row++) {
+            for (let column = 0; column < _BOARD_SIDES; column++) {
+                _cells[index].innerText = "";
+                //console.log(_cells[index])
+                index++
+            }
+        }
+    }
+
     const getPlayersInfo = () => {
         const _playersInfo = doc.querySelectorAll('.player-containers')
+        const _pScoreName = doc.querySelectorAll(".p-score-name")
+
 
         const players = []
         let defaultName = 1;
+        let indexing = 0
 
         _playersInfo.forEach(player => {
             const p_role = player.children[1].innerText
-            const p_name = (player.children[2].value || defaultName)
+            const p_name = (player.children[2].value || `Player ${defaultName}`)
             const temp = {name: p_name, selectedRole: p_role}
+
+            
+            _pScoreName[indexing].innerText = `${p_name} :` //Formatting Name Score
             
             players.push(temp)
             defaultName++
+            indexing++
         })
+
 
         Gameboard.setPlayers(players[0], players[1])
     }
@@ -185,7 +220,18 @@ const DisplayController = (function (doc) {
         _swtch_btn.addEventListener('click', () => {
             toggleRoles()
         })
+
+        _restartBtn.addEventListener('click', () => {
+            _preGameContainer.classList.toggle("hide")
+            _gameResultCont.classList.toggle("hide")
+            _gameResultCont.classList.toggle("show")
+            _gameResultCont.classList.toggle("blurr")
+            
+            clearBoardContents()
+            Gameboard.resetMoveCounts()
+        })
     }
+    
 
     const toggleRoles = () => {
         if (_p1Role.innerText == "X") {
@@ -203,6 +249,11 @@ const DisplayController = (function (doc) {
         displayGameResult()
     }
 
+    const displayScore = (playerOne, playerTwo) => {
+        _p1Score.innerText = playerOne.getScore()
+        _p2Score.innerText = playerTwo.getScore()
+    }
+
     const displayGameResult = () => {
         _outerGameBoard.classList.toggle("hide")
         _gameResultCont.classList.toggle("hide")
@@ -210,7 +261,7 @@ const DisplayController = (function (doc) {
         _gameResultCont.classList.toggle("blurr")
     }
 
-    return {displayBoardContents, createListeners, getPlayersInfo, setWinner}
+    return {displayBoardContents, createListeners, getPlayersInfo, setWinner, displayScore}
 })(document);
 
 
@@ -229,12 +280,21 @@ export const Game = ( function () {
         DisplayController.createListeners();
     }
 
-    return {start,create}
+    return {start, create}
 })();
 
 const Player = (name, role) => {
+    let _score = 0;
+
     const getName = () => name
     const getRole = () => role
+    const getScore = () => _score
+
+    const incrementScore = () => {
+        ++_score
+    }
+
+
 
     const takeCell = function (row, column) {
         if (Gameboard.cellIsEmpty(row, column)) {
@@ -246,5 +306,5 @@ const Player = (name, role) => {
     }
 
 
-    return {getName, getRole, takeCell}
+    return {getName, getRole, takeCell, incrementScore, getScore}
 }
