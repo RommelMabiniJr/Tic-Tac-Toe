@@ -3,6 +3,7 @@ const Gameboard = (function () {
     let _moveCount = 0;
     let _players = {};
     let _currentPlayer;
+    let _gameRound = 0;
 
     const create = () => {
         for (let row = 0; row < 3; row++) {
@@ -10,13 +11,13 @@ const Gameboard = (function () {
         }
     }
 
-    const resetMoveCounts = () => {
-        _moveCount = 0;
-    }
 
-    const _moveCounter = () => { 
-        ++_moveCount
-    }
+    const _moveCounter = () => ++_moveCount;
+    const resetMoveCounts = () => _moveCount = 0;
+
+    const _roundCounter = () => ++_gameRound;
+    const resetRoundCounts = () => _gameRound = 0;
+
 
     const straightChecker = (playerVal, [row, column]) => {
         const symbol = playerVal.getRole()
@@ -48,12 +49,22 @@ const Gameboard = (function () {
             //alert(`Player ${playerVal.getName()} wins!!`)
             const msg = `${playerVal.getName()} wins!`
             const winningRole = playerVal.getRole()
+
+            _roundCounter()
+            DisplayController.setRound(_gameRound)
+
             playerVal.incrementScore()
             DisplayController.setWinner(msg, winningRole)
+            
         } else if (_moveCount == 9) {
             const msg = "It's a tie!!"
             const winningRole = "X:O"
+
+            _roundCounter()
+            DisplayController.setRound(_gameRound)
+
             DisplayController.setWinner(msg, winningRole)
+            
         }
 
 
@@ -76,7 +87,7 @@ const Gameboard = (function () {
         return board;
     }
 
-    const setGameBoard = (playerValue, [row, column]) => {
+    const setInGameBoard = (playerValue, [row, column]) => {
         _gameboard[row][column] = playerValue.getRole();
         _moveCounter()
 
@@ -103,10 +114,6 @@ const Gameboard = (function () {
         }
     }
 
-    const restart = () => {
-
-    }
-
     const getCurrentPlayer = () => {
         return _currentPlayer
     }
@@ -119,7 +126,7 @@ const Gameboard = (function () {
 
     const showCurrentBoardState = () => console.log(_gameboard)
 
-    return {create, cellIsEmpty, getGameBoard, setGameBoard, linkCellEvent, setPlayers, switchPlayer, resetMoveCounts}
+    return {create, cellIsEmpty, getGameBoard, setInGameBoard, linkCellEvent, setPlayers, switchPlayer, resetMoveCounts, resetRoundCounts}
 
 })();
 
@@ -136,9 +143,12 @@ const DisplayController = (function (doc) {
     const _winnerName = doc.querySelector(".w-name")
     const _winnerRole = doc.querySelector(".winner-role")
     const _gameResultCont = doc.querySelector(".game-result")
+    const _homeBtn = doc.querySelector(".home")
     const _restartBtn = doc.querySelector(".restart")
+    const _continueBtn = doc.querySelector(".continue")
     const _p1Score = doc.querySelector(".p1-score-actual")
     const _p2Score = doc.querySelector(".p2-score-actual")
+    const _roundNum = doc.querySelector(".current-round")    
 
     const displayBoardContents = (gameObj) => {
         const _gameboard = gameObj.getGameBoard()
@@ -212,23 +222,49 @@ const DisplayController = (function (doc) {
                 
                 //triggers the start of the game setup
                 if (btn.classList.contains('arrowRight')) {
+                    resets()
                     Game.start()
                 }
             });
         })
 
+        const resets = () => {
+            clearBoardContents()
+            Gameboard.resetMoveCounts()
+        }
+
         _swtch_btn.addEventListener('click', () => {
             toggleRoles()
         })
 
+        //reset all from the very start
+        _homeBtn.addEventListener('click', () => {
+            
+        })
+
+        //reset to role selection and name creation
         _restartBtn.addEventListener('click', () => {
             _preGameContainer.classList.toggle("hide")
+
             _gameResultCont.classList.toggle("hide")
             _gameResultCont.classList.toggle("show")
             _gameResultCont.classList.toggle("blurr")
-            
-            clearBoardContents()
-            Gameboard.resetMoveCounts()
+            resets()
+
+            //special reset to set game round to 1
+            Gameboard.resetRoundCounts()
+        })
+
+        //continue game to next round
+        _continueBtn.addEventListener('click', () => {
+            _outerGameBoard.classList.toggle("hide")
+            _gameResultCont.classList.toggle("hide")
+            _gameResultCont.classList.toggle("show")
+            _gameResultCont.classList.toggle("blurr")
+
+            //this reset allows us to preserve the previous players state (e.g. scores)
+            Gameboard.create()
+            resets()
         })
     }
     
@@ -249,6 +285,8 @@ const DisplayController = (function (doc) {
         displayGameResult()
     }
 
+    const setRound = (round) => _roundNum.innerText = round;
+
     const displayScore = (playerOne, playerTwo) => {
         _p1Score.innerText = playerOne.getScore()
         _p2Score.innerText = playerTwo.getScore()
@@ -261,12 +299,13 @@ const DisplayController = (function (doc) {
         _gameResultCont.classList.toggle("blurr")
     }
 
-    return {displayBoardContents, createListeners, getPlayersInfo, setWinner, displayScore}
+    return {displayBoardContents, createListeners, getPlayersInfo, setWinner, displayScore, setRound}
 })(document);
 
 
 export const Game = ( function () {
 
+    //creates new board and players 
     const initialize = () => {
         Gameboard.create();
         DisplayController.getPlayersInfo();
@@ -298,7 +337,7 @@ const Player = (name, role) => {
 
     const takeCell = function (row, column) {
         if (Gameboard.cellIsEmpty(row, column)) {
-            Gameboard.setGameBoard(this, [row, column])
+            Gameboard.setInGameBoard(this, [row, column])
             Gameboard.switchPlayer()
         } else {
             console.log("Error: Cell is Taken")
