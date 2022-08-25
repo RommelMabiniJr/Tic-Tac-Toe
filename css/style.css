@@ -263,6 +263,12 @@ input[placeholder="Enter Name"]:focus {
     margin: var(--s-space) auto;
 }
 
+/*GAME-MODE-SElECTION*/
+
+.intro {
+    text-align: center;
+}
+
 
 
 
