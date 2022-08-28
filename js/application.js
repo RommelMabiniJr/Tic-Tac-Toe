@@ -389,21 +389,18 @@ export const Game = ( function () {
     }
 
     const create = () => {
-        tester()
         DisplayController.createListeners();
     }
 
     return {start, create}
 })();
 
-const tester = () => {
-    let boardl = [ [ 'X', 'O', 'X' ],
-              [ 'O', 'O', 'X' ],
-              [ null , null, null ] ];
-    let helper = AI("X", "O")
-    let best = helper.findBestMove(boardl)
-    console.log("" + best.getRow() + best.getCol())
-}
+
+
+
+
+
+
 
 const Player = (name, role, mode) => {
     let _score = 0;
@@ -436,10 +433,13 @@ const Player = (name, role, mode) => {
 }
 
 
-const AI = (player, bot) => {
 
-    const getPlayer = () => player; 
-    const getBot = () => bot; 
+
+
+
+
+
+const AI = (player, bot) => { 
     
     const move = (row, col) => {
         const getRow = () => row
@@ -595,7 +595,7 @@ const AI = (player, bot) => {
             }
         }
 
-        console.log(bestVal)
+        //console.log(bestVal)
         
         return bestMove
     } 

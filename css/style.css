@@ -34,6 +34,10 @@ body {
     font-family: 'Quicksand','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.ttt {
+    margin-top: var(--xxs-space);
+}
+
 
 .main-container {
     display: flex;
@@ -68,7 +72,7 @@ body {
     grid-template-rows: repeat(3, 1fr);
     width: var(--board-width);
     height: var(--board-width);
-    margin: auto 0;
+    margin: 55px 0;
 }
 
 .row {
@@ -99,7 +103,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(var(--default-width) - 70px);
     width: calc(var(--default-width) + 120px)
 }
 
@@ -111,6 +114,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin: var(--s-space);
+    margin-bottom: 0;
 }
 
 .p1-container,
@@ -269,6 +273,67 @@ input[placeholder="Enter Name"]:focus {
     text-align: center;
 }
 
+.game-mode {
+    display: flex;
+    justify-content: center;
+}
+
+.game-mode input {
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+}
+
+.game-mode label {
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0.5rem 2rem;
+    border: 2px solid #7E8287;
+    width: 75px;
+}
+
+.game-mode label:hover {
+    cursor: pointer;
+}
+
+.game-mode input#opponent-player:checked+label {
+    background-color: #114B5F;
+    color: #E8F1F2;
+}
+
+.game-mode input#opponent-AI:checked+label {
+    background-color: #542952;
+    color: #E8F1F2;
+}
+
+.game-mode label:first-of-type {
+    border-radius: 25px 0 0 25px;
+}
+
+.game-mode label:last-of-type {
+    border-radius: 0 25px 25px 0;
+}
+
+.intro {
+    border-bottom: 5px solid #3f3f3f;
+    width: 450px;
+    margin: 0 auto;
+}
+
+.intro h2 {
+    margin: 0;
+    margin-bottom: var(--xs-space);
+    font-size: var(--s-fsize);
+}
+
+.intro .game-mode {
+    margin-bottom: 20px;
+}
+
+.intro .set-up-container {
+    margin: 0 auto;
+}
 
 
 
