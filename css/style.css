@@ -347,6 +347,9 @@ input[placeholder="Enter Name"]:focus {
 }
 
 
+
+
+
 /*Simple Animation for game result*/
 .show {
     animation: fadeIn 3s;

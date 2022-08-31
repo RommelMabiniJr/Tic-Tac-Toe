@@ -300,11 +300,6 @@ const DisplayController = (function (doc) {
             toggleRoles()
         })
 
-        //reset all from the very start
-        _homeBtn.addEventListener('click', () => {
-            
-        })
-
         //reset to role selection and name creation
         _restartBtn.addEventListener('click', () => {
             _preGameContainer.classList.toggle("hide")
