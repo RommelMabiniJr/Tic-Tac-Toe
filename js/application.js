@@ -78,8 +78,8 @@ const Gameboard = (function () {
 
         DisplayController.displayScore(_players.p1, _players.p2);
 
-        console.log(`${dResult}${dReverseResult}${symbol}`)
-        console.log(diagonalTestReverse)
+        //console.log(`${dResult}${dReverseResult}${symbol}`)
+        //console.log(diagonalTestReverse)
     }
 
     const cellIsEmpty = (row,column) => {
@@ -259,7 +259,7 @@ const DisplayController = (function (doc) {
         _gameModes.forEach(mode => {
             mode.addEventListener('click', () => {
                 currentGameMode = mode.value
-                console.log(currentGameMode)
+                //console.log(currentGameMode)
             })
         });
 
@@ -295,6 +295,7 @@ const DisplayController = (function (doc) {
             clearBoardContents()
             Gameboard.resetMoveCounts()
         }
+
 
         _swtch_btn.addEventListener('click', () => {
             toggleRoles()
@@ -359,7 +360,7 @@ const DisplayController = (function (doc) {
 
     const isVsPlayer = () => {
         var gameSelected = Array.from(_gameModes).find(mode => mode.checked)
-        console.log(gameSelected.value)
+        //console.log(gameSelected.value)
         if (gameSelected.value == "vsPlayer") {
             return true
         }
